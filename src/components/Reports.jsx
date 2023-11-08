@@ -2,8 +2,8 @@ import React from 'react'
 
 function Reports() {
   return (
-    <div className='text-lg items-center justify-center flex'>
-        <h1>Reports</h1>
+    <div className='text-[3rem] items-center justify-center flex  h-[90vh]'>
+        <h2>Reports</h2>
     </div>
   )
 }

@@ -1,0 +1,20 @@
+[
+    {
+        "sirialNum":123456789,
+        "amount":5,
+        "itemName":"computer",
+        "description":"thie is a computer"
+    },
+    {
+        "sirialNum":987654321,
+        "amount":4,
+        "itemName":"screen",
+        "description":"thie is a screen"
+    },
+    {
+        "sirialNum":505050506,
+        "amount":2,
+        "itemName":"remote",
+        "description":"thie is a remote"
+    }
+]
