@@ -12,6 +12,12 @@
         "description":"thie is a screen"
     },
     {
+        "sirialNum":121212129,
+        "amount":8,
+        "itemName":"maous",
+        "description":"thie is a maous"
+    },
+    {
         "sirialNum":505050506,
         "amount":2,
         "itemName":"remote",
