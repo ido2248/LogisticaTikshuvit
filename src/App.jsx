@@ -1,4 +1,5 @@
 import Sidbar from './components/Sidbar'
+import './App.css'
 import DistributionOfItems from './components/DistributionOfItems.jsx'
 import Details from './components/Details.jsx'
 import Reports from './components/Reports.jsx'

@@ -1,4 +1,4 @@
-import { useState , useEffect } from "react"
+import { useState , useEffect, useRef} from "react"
 import FakeData from "../FakeData.json"
 
 
@@ -11,13 +11,25 @@ function DistributionOfItems() {
     5: FakeData.map(item => item.sirialNum),
     10: ["בוצא", "ממתין למשיכה", "בוטל"],
   }
+  const formRef= useRef()
 
-  const handelSubmit = ((e) => {
-    console.log(e.target.value)
-  })
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    
+    const transfer = JSON.stringify(itemData)
+    console.log(transfer)
+    
+
+    setSelectItem(null)
+    setItemData({amount: null, itemName: null, description: null})
+    setNeedItem(null)
+    formRef.current.reset()
+    
+  }
 
   const [selectItem, setSelectItem] = useState(null)
   const [itemData, setItemData] = useState({amount: null, itemName: null, description: null})
+  const [needItem, setNeedItem] = useState(null)
 
   useEffect(() => {
     FakeData.forEach(item => {
@@ -25,82 +37,86 @@ function DistributionOfItems() {
         setItemData({
           amount: item.amount,
           itemName: item.itemName,
-          description: item.description
+          description: item.description,
+          sirialNum: item.sirialNum,
+          reqNum: Number(needItem)
         });
         return;
       }
     });
-  }, [selectItem])
+  }, [selectItem, needItem])
 
   return (
-    <section  dir='rtl' className=' text-[16px] text-right flex-col items-center justify-center flex h-[60vh]'>
+    <section  dir='rtl' className=' text-[16px] text-right flex-col items-center justify-center flex h-[80vh] w-4/5'>
+      <h5 className="text-[22px] text-right">בקשת פריטים</h5>
       <div>תאריך שינוי אחרון</div>
-      <form onSubmit={handelSubmit} className='bg-gray-400 rounded-lg w-[93%] flex flex-col p-2 items-center justify-center mx-6'>
-        <div className="grid grid-cols-12 justify-center place-items-center">
-          <div className="flex-col flex text-center w-[80%] ">
-            <label>מס"ד</label>
+      <form ref={formRef} onSubmit={handelSubmit} className='bg-gray-400 rounded-lg w-[95%] flex flex-row p-2 place-items-center justify-center shadow-lg'>
+        <div className="w-full flex flex-row place-items-center justify-center">
+          <div className="flex-col flex text-center w-[7%] mb-2 p-2">
+            <label className="font-bold">מס"ד</label>
             <p id='masad' className="mt-2"> 1.</p>
           </div>
-          <div className="flex-col flex text-center w-[80%]">
-            <label>תאריך</label>
-            <input id='date'  type="date" autoComplete="off" required defaultValue={defaultValue} className="my-2 pr-1 rounded-md"/>
+          <div className="flex-col flex text-center w-[10%] p-2">
+            <label className="font-bold">תאריך</label>
+            <input id='date'  type="date" autoComplete="off" required defaultValue={defaultValue} className="my-2 pr-1 rounded-md focus:outline-none"/>
           </div>
-          <div className="flex-col flex text-center w-[80%] mb-2">
-            <label>מחלקה/יחידה</label>
-            <select id="mahlakaYehita" required className="mt-2 rounded-md h-6">
+          <div className="flex-col flex text-center w-[12%] mb-2 p-2">
+            <label className="font-bold">מחלקה/יחידה</label>
+            <select id="mahlakaYehita" className="mt-2 rounded-md h-6 focus:outline-none">
               <option value="">בחר אפשרות</option>
               {options[2].map((item, index) =>(
                 <option key={index} value={item}>{item}</option>
               ))}
             </select>
           </div>
-          <div className="flex-col flex text-center w-[80%]">
-            <label>מ.א גרם משיכה</label>
-            <input id="couse" type="text" autoComplete="off" required className="my-2 pr-1 rounded-md"/>
+          <div className="flex-col flex text-center w-1/12 p-2">
+            <label className="font-bold">מ.א גרם משיכה</label>
+            <input id="couse" type="text" autoComplete="off" required className="my-2 pr-1 rounded-md focus:outline-none"/>
           </div>
-          <div className="flex-col flex text-center w-[80%]">
-            <label>שם מלא</label>
-            <input id="fullName"  type="text" autoComplete="off" required className="my-2 pr-1 rounded-md"/>
+          <div className="flex-col flex text-center w-[7.5%] p-2">
+            <label className="font-bold">שם מלא</label>
+            <input id="fullName"  type="text" autoComplete="off" required className="my-2 pr-1 rounded-md focus:outline-none"/>
           </div>
-          <div className="flex-col flex text-center w-[80%] mb-2">
-            <label>מק"ט</label>
-            <select id="meket" className="mt-2 rounded-md h-6" onChange={(e) => setSelectItem(e.target.value)}>
+          <div className="flex-col flex text-center w-[12%] mb-2 p-2">
+            <label className="font-bold">מק"ט</label>
+            <select id="meket" required className="mt-2 rounded-md h-6 focus:outline-none" onChange={(e) => setSelectItem(e.target.value)} >
               <option value="">בחר אפשרות</option>
               {options[5].map((item, index) =>(
                 <option required key={index} value={item}>{item}</option>
               ))}
             </select>
           </div>
-          <div className="flex-col flex text-center w-[80%]">
-            <label>כמות</label>
-            <input id="amount" type="text" autoComplete="off" required defaultValue={itemData.amount} className="my-2 pr-1 rounded-md"/>
+          <div className="flex-col flex text-center w-[6%] p-2">
+            <label className="font-bold">כמות</label>
+            <input id="amount" type="text" autoComplete="off" required  className="my-2 pr-1 rounded-md focus:outline-none" onChange={(e) => setNeedItem(e.target.value)} />
           </div>
-          <div className="flex-col flex text-center w-[80%] ml-3">
-            <label>סוג פריט</label>
-            <input id="typeOfItem" type="text" autoComplete="off" required defaultValue={itemData.itemName} className="my-2 pr-1 rounded-md" disabled/>
+          <div className="flex-col flex text-center w-[7%] p-2">
+            <label className="font-bold">סוג פריט</label>
+            <input id="typeOfItem" type="text" autoComplete="off" required defaultValue={itemData.itemName} className="my-2 pr-1 rounded-md focus:outline-none" disabled/>
           </div>
-          <div className="flex-col flex text-center w-full">
-            <label>פירוט מורחב של הפריט</label>
-            <input id="decription" type="text" autoComplete="off" required defaultValue={itemData.description} className="my-2 pr-1 rounded-md" disabled/>
+          <div className="flex-col flex text-center w-[12%] p-2">
+            <label className="font-bold">פירוט מורחב של הפריט</label>
+            <input id="decription" type="text" autoComplete="off" required defaultValue={itemData.description} className="my-2 pr-1 rounded-md focus:outline-none" disabled/>
           </div>
-          <div className="flex-col flex text-center w-[80%] mr-3">
-            <label>הערות</label>
-            <input id="notes" type="text" autoComplete="off" required className="my-2 pr-1 rounded-md"/>
+          <div className="flex-col flex text-center w-1/12 p-2">
+            <label className="font-bold">הערות</label>
+            <input id="notes" type='text' autoComplete="off" className="my-2 pr-1 rounded-md focus:outline-none"/>
           </div>
-          <div className="flex-col flex text-center w-[80%] mb-2">
-            <label>סטטוס</label>
-            <select id="status" className="mt-2 rounded-md h-6">
+          <div className="flex-col flex text-center w-[12%] p-2 mb-2">
+            <label className="font-bold">סטטוס</label>
+            <select id="status" className="mt-2 rounded-md h-6" >
               <option value="">בחר אפשרות</option>
               {options[10].map((item, index) =>(
                 <option key={index} value={item}>{item}</option>
               ))}
             </select>
           </div>
-          <div className="flex-col flex text-center w-[80%] mb-2">
-            <label>שלח טופס</label>
-            <button id="sendData" className="mt-2 bg-white rounded-md pr-1 pl-1 w-full">שלח בקשה</button>
+          <div className="flex-col flex text-center w-40 mb-2 p-2">
+            <label className="font-bold">שליחת טופס</label>
+            <button id="sendData" className="mt-2 bg-white rounded-md px-1 w-full  hover:bg-slate-200">שלח בקשה</button>
           </div>
         </div>
+        
       </form>
     </section>
   )
@@ -128,7 +144,7 @@ export default DistributionOfItems
                   </select>
                 ) : (
                   index === 0 ? <p className="mt-2">{index + 1}.</p> : (
-                    <input className=" w-full mt-2 pr-1 rounded-md" type={header.type} defaultValue={header.title !== null ? itemData[header.title] : undefined} disabled={index === 7 || index === 8}/>
+                    <input className=" w-auto mt-2 pr-1 rounded-md" type={header.type} defaultValue={header.title !== null ? itemData[header.title] : undefined} disabled={index === 7 || index === 8}/>
                   )
                 )}
               </div>
